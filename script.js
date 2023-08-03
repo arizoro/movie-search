@@ -47,8 +47,6 @@ $('#inputSearch').on('keyup', function(e){
 })
 
 $('#movieList').on('click','.seeDetail', function(){
-  console.log($(this).data('id'))
-
   $.ajax({
     url : "http://www.omdbapi.com",
     type : "GET" ,
