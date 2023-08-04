@@ -1,7 +1,7 @@
-function getMovies(){
+async function getMovies(){
   $('#movieList').html('')
 
-  $.ajax({
+await $.ajax({
     url : "http://www.omdbapi.com",
     type : "GET" ,
     dataType : "json",
@@ -9,12 +9,12 @@ function getMovies(){
         'apikey' : '9a42b47a',
         's' : $('#inputSearch').val()
     },
-    success : function(result){
-          
+    timeout: 30000,
+    success : function(result){  
         let movies = result.Search
         if( result.Response == "True"){
-            $.each(movies, function(i,data) {
-                $('#movieList').append(`
+            $.each(movies, async function(i,data) {
+                await $('#movieList').append(`
                 <div class="col-md-4">
                 <div class="card mb-3" >
                 <img src="`+data.Poster+`" class="card-img-top" alt="...">
@@ -31,8 +31,10 @@ function getMovies(){
           }else{
               $('#movieList').html('<h1 class="text-center mt-3" > '+result.Error+'</h1>')
             }
-
-        }
+        },
+      error: function (error){
+        $('#movieList').html(error.message)
+      }
     }
 )}
 
@@ -46,8 +48,8 @@ $('#inputSearch').on('keyup', function(e){
   }
 })
 
-$('#movieList').on('click','.seeDetail', function(){
-  $.ajax({
+$('#movieList').on('click','.seeDetail', async function(){
+  await $.ajax({
     url : "http://www.omdbapi.com",
     type : "GET" ,
     dataType : "json",
